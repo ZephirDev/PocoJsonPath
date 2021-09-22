@@ -3,6 +3,7 @@
 //
 
 #include "JsonPathScope.hpp"
+#include "Operators/IOperator.hpp"
 
 namespace PocoJsonPath {
 
@@ -89,6 +90,7 @@ namespace PocoJsonPath {
         if (filters.end() != it) {
             filters.erase(it);
         }
+        return *this;
     }
 
     /**
@@ -124,6 +126,40 @@ namespace PocoJsonPath {
             throw std::logic_error("The '" + filterName + "' filter doesn't exists.");
         }
         return filter->invoke(current, parameters);
+    }
+
+    /**
+     * Get the operator
+     *
+     * @param operator
+     *
+     * @return operator or nullptr
+     */
+    std::shared_ptr<Operators::IOperator> JsonPathScope::getOperator(const std::string& operatorName) const
+    {
+        auto it = operators.find(operatorName);
+        if (operators.end() != it) {
+            return it->second;
+        }
+        return nullptr;
+    }
+
+    /**
+     * Invoke an operator
+     *
+     * @param operatorName
+     * @param leftMember
+     * @param rightMember
+     *
+     * @return value
+     */
+    Poco::Dynamic::Var JsonPathScope::invokeOperator(const std::string& operatorName, Poco::Dynamic::Var& leftMember, Poco::Dynamic::Var& rightMember) const
+    {
+        auto op = getOperator(operatorName);
+        if (nullptr == op) {
+            throw std::logic_error("The '" + operatorName + "' operator doesn't exists.");
+        }
+        return op->invoke(*this, leftMember, rightMember);
     }
 
 }

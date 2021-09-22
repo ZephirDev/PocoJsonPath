@@ -58,5 +58,17 @@ namespace PocoJsonPath {
                 return std::nullopt;
             }
         }
+
+        /**
+         * Try cast to a number
+         *
+         * @param json
+         *
+         * @return mb json number
+         */
+        std::optional<double> JsonHelper::castToDouble(Poco::Dynamic::Var& json) noexcept
+        {
+            return JsonHelper::castToNumber<double, double, float, long long, long, int, short>(json);
+        }
     }
 }

@@ -44,6 +44,35 @@ namespace PocoJsonPath {
              */
             std::optional<Poco::JSON::Array::Ptr> castToJsonArray(Poco::Dynamic::Var& json) noexcept;
 
+            /**
+             * Try cast to a number
+             *
+             * @param json
+             *
+             * @return mb json number
+             */
+            template<typename Result, typename Item, typename... Items>
+            inline std::optional<Result> castToNumber(Poco::Dynamic::Var& json) noexcept
+            {
+                try {
+                    return Result{json.extract<Item>()};
+                } catch (const std::exception&) {
+                    if constexpr (sizeof...(Items) > 0) {
+                        return castToNumber<Result, Items...>(json);
+                    } else {
+                        return std::nullopt;
+                    }
+                }
+            }
+
+            /**
+             * Try cast to a number
+             *
+             * @param json
+             *
+             * @return mb json number
+             */
+            std::optional<double> castToDouble(Poco::Dynamic::Var& json) noexcept;
         }
 
     }

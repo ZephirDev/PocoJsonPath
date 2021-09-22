@@ -8,6 +8,7 @@
 #include <stack>
 
 #include "PocoJsonPath/Helpers/JsonHelper.hpp"
+#include "PocoJsonPath/Operators/IOperator.hpp"
 
 namespace PocoJsonPath {
 
@@ -253,6 +254,24 @@ namespace PocoJsonPath {
                 }
             };
 
+            ref["OPERATOR"] = [](const peg::SemanticValues &vs) {
+                auto op = vs.token_to_string();
+                return OperatorFunction([op](JsonPathScope& scope, Poco::Dynamic::Var& leftMember, Poco::Dynamic::Var& rightMember) {
+                    return scope.invokeOperator(op, leftMember, rightMember);
+                });
+            };
+
+            ref["QUERY_WHERE"] = [](const peg::SemanticValues &vs) {
+                auto leftMemberFn = std::any_cast<PathFunction>(vs[0]);
+                auto operatorFn = std::any_cast<OperatorFunction>(vs[1]);
+                auto rightMemberFn = std::any_cast<PathFunction>(vs[2]);
+                return PathFunction([leftMemberFn, operatorFn, rightMemberFn](JsonPathScope& scope) {
+                    auto leftMember = leftMemberFn(scope);
+                    auto rightMember = rightMemberFn(scope);
+                    return operatorFn(scope, leftMember, rightMember);
+                });
+            };
+
             ref["FILTER"] = [](const peg::SemanticValues &vs) {
                 return PathFunction([](JsonPathScope& scope) {
                     // TODO filter
@@ -347,5 +366,19 @@ namespace PocoJsonPath {
     const std::string& JsonPath::getPath() const
     {
         return path;
+    }
+
+    bool JsonPath::hasOperator(const std::string& symbol) const
+    {
+        return this->operators.find(symbol) != this->operators.end();
+    }
+
+    const std::shared_ptr<Operators::IOperator> JsonPath::getOperator(const std::string& symbol) const
+    {
+        if (hasOperator(symbol)) {
+            return operators.find(symbol)->second;
+        } else {
+            return nullptr;
+        }
     }
 }

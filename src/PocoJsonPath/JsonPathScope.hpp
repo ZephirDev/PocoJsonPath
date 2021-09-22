@@ -14,12 +14,16 @@
 #include "Filters/IFilter.hpp"
 
 namespace PocoJsonPath {
+    namespace Operators {
+        class IOperator;
+    }
 
     class JsonPathScope {
         Poco::Dynamic::Var root;
         Poco::Dynamic::Var current;
 
         std::map<std::string, std::shared_ptr<Filters::IFilter>> filters;
+        std::map<std::string, std::shared_ptr<Operators::IOperator>> operators;
 
     public:
 
@@ -96,6 +100,26 @@ namespace PocoJsonPath {
          * @return result
          */
         Poco::Dynamic::Var invokeFilter(const std::string& filterName, std::vector<Poco::Dynamic::Var>& parameters) const;
+
+        /**
+         * Get the operator
+         *
+         * @param operator
+         *
+         * @return operator or nullptr
+         */
+        std::shared_ptr<Operators::IOperator> getOperator(const std::string& operatorName) const;
+
+        /**
+         * Invoke an operator
+         *
+         * @param operatorName
+         * @param leftMember
+         * @param rightMember
+         *
+         * @return value
+         */
+        Poco::Dynamic::Var invokeOperator(const std::string& operatorName, Poco::Dynamic::Var& leftMember, Poco::Dynamic::Var& rightMember) const;
     };
 
 }
