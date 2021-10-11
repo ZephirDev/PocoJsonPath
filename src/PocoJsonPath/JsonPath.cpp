@@ -26,7 +26,7 @@ namespace PocoJsonPath {
                 INIT                        <- ROOT / CURRENT
                 FILTER                      <- '[' '?' '(' QUERY_WHERE ')' ']'
                 QUERY_WHERE                 <- '(' (QUERY_WHERE/QUERY/VALUE) ')' OPERATOR '(' (QUERY_WHERE/QUERY/VALUE) ')'  / '(' (QUERY_WHERE/QUERY/VALUE) ')' OPERATOR (QUERY_WHERE/QUERY/VALUE) / (QUERY/VALUE) OPERATOR '(' (QUERY_WHERE/QUERY/VALUE) ')' / (QUERY/VALUE) OPERATOR (QUERY_WHERE/QUERY/VALUE) / '(' (QUERY_WHERE/QUERY/VALUE) ')'
-                OPERATOR                    <- '==' / '!=' / '>=' / '>' / '<=' / '<' / '&&' / '||'
+                OPERATOR                    <- '+' / '-' / '/' / '*' / '==' / '!=' / '>=' / '>' / '<=' / '<' / '&&' / '||'
                 INDEX                       <- '[' (STRING/INDEX_KEYWORD_NUMBER) (',' (STRING/INDEX_KEYWORD_NUMBER))* ']' / '.' INDEX_KEYWORD
                 DYNAMIC_INDEX               <- '[' '(' QUERY ')' ']'
                 CHILDREN                    <- '..' INDEX_KEYWORD

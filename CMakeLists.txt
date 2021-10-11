@@ -28,7 +28,13 @@ add_library(PocoJsonPath
         src/PocoJsonPath/Helpers/JsonHelper.cpp
         src/PocoJsonPath/Helpers/JsonHelper.hpp
         src/PocoJsonPath/Filters/IFilter.hpp
-        src/PocoJsonPath/Operators/IOperator.hpp src/PocoJsonPath/Operators/AbstractOperator.cpp src/PocoJsonPath/Operators/AbstractOperator.hpp)
+        src/PocoJsonPath/Operators/IOperator.hpp
+        src/PocoJsonPath/Operators/AbstractOperator.cpp
+        src/PocoJsonPath/Operators/AbstractOperator.hpp
+        src/PocoJsonPath/Operators/AddOperator.cpp
+        src/PocoJsonPath/Operators/AddOperator.hpp
+        src/PocoJsonPath/Operators/SubstractOperator.cpp
+        src/PocoJsonPath/Operators/SubstractOperator.hpp)
 target_link_libraries(PocoJsonPath Poco::Foundation Poco::JSON)
 
 add_subdirectory(test)

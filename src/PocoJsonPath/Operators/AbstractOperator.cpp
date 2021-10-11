@@ -120,7 +120,7 @@ namespace PocoJsonPath {
                 return invokeNumber(scope, nbLeftMember.value(), nbRightMember.value());
             }
 
-            return false;
+            return Poco::Dynamic::Var{};
         }
 
     }

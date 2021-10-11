@@ -2,26 +2,35 @@
 // Created by desrumaux on 02/09/2021.
 //
 
+#include <PocoJsonPath/Operators/SubstractOperator.hpp>
 #include "JsonPathScope.hpp"
 #include "Operators/IOperator.hpp"
+
+#include "Operators/AddOperator.hpp"
 
 namespace PocoJsonPath {
 
     JsonPathScope::JsonPathScope(Poco::Dynamic::Var root, Poco::Dynamic::Var current)
         : root(root)
         , current(current)
+        , operators({
+            {"+", std::make_shared<Operators::AddOperator>()},
+            {"-", std::make_shared<Operators::SubstractOperator>()},
+        })
     {}
 
     JsonPathScope::JsonPathScope(const JsonPathScope& jsonPathScope)
         : root(jsonPathScope.root)
         , current(jsonPathScope.current)
         , filters(jsonPathScope.filters)
+        , operators(jsonPathScope.operators)
     {}
 
     JsonPathScope::JsonPathScope(const JsonPathScope& jsonPathScope, Poco::Dynamic::Var current)
         : root(jsonPathScope.root)
         , current(current)
         , filters(jsonPathScope.filters)
+        , operators(jsonPathScope.operators)
     {}
 
     /**
