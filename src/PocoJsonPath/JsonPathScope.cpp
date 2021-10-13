@@ -2,11 +2,14 @@
 // Created by desrumaux on 02/09/2021.
 //
 
-#include <PocoJsonPath/Operators/SubstractOperator.hpp>
-#include "JsonPathScope.hpp"
-#include "Operators/IOperator.hpp"
 
+#include "JsonPathScope.hpp"
+
+#include "Operators/IOperator.hpp"
 #include "Operators/AddOperator.hpp"
+#include "Operators/SubstractOperator.hpp"
+#include "Operators/MultOperator.hpp"
+#include "Operators/DivOperator.hpp"
 
 namespace PocoJsonPath {
 
@@ -16,6 +19,8 @@ namespace PocoJsonPath {
         , operators({
             {"+", std::make_shared<Operators::AddOperator>()},
             {"-", std::make_shared<Operators::SubstractOperator>()},
+            {"*", std::make_shared<Operators::MultOperator>()},
+            {"/", std::make_shared<Operators::DivOperator>()},
         })
     {}
 
