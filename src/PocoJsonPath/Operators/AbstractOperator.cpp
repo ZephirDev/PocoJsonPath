@@ -20,7 +20,7 @@ namespace PocoJsonPath {
          */
         Poco::Dynamic::Var AbstractOperator::invokeString(const JsonPathScope& scope, std::string& leftMember, std::string& rightMember) const
         {
-            return false;
+            return Poco::Dynamic::Var{};
         }
 
         /***
@@ -34,7 +34,7 @@ namespace PocoJsonPath {
          */
         Poco::Dynamic::Var AbstractOperator::invokeNumber(const JsonPathScope& scope, double& leftMember, double& rightMember) const
         {
-            return false;
+            return Poco::Dynamic::Var{};
         }
 
         /***
@@ -48,7 +48,7 @@ namespace PocoJsonPath {
          */
         Poco::Dynamic::Var AbstractOperator::invokeBoolean(const JsonPathScope& scope, bool& leftMember, bool& rightMember) const
         {
-            return false;
+            return Poco::Dynamic::Var{};
         }
 
         /***
@@ -62,7 +62,7 @@ namespace PocoJsonPath {
          */
         Poco::Dynamic::Var AbstractOperator::invokeObject(const JsonPathScope& scope, Poco::JSON::Object::Ptr& leftMember, Poco::JSON::Object::Ptr& rightMember) const
         {
-            return false;
+            return Poco::Dynamic::Var{};
         }
 
         /***
@@ -76,7 +76,7 @@ namespace PocoJsonPath {
          */
         Poco::Dynamic::Var AbstractOperator::invokeArray(const JsonPathScope& scope, Poco::JSON::Array::Ptr& leftMember, Poco::JSON::Array::Ptr& rightMember) const
         {
-            return false;
+            return Poco::Dynamic::Var{};
         }
 
         /***

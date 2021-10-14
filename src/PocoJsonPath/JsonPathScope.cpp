@@ -10,6 +10,8 @@
 #include "Operators/SubstractOperator.hpp"
 #include "Operators/MultOperator.hpp"
 #include "Operators/DivOperator.hpp"
+#include "Operators/EqualOperator.hpp"
+#include "Operators/NotEqualOperator.hpp"
 
 namespace PocoJsonPath {
 
@@ -21,6 +23,8 @@ namespace PocoJsonPath {
             {"-", std::make_shared<Operators::SubstractOperator>()},
             {"*", std::make_shared<Operators::MultOperator>()},
             {"/", std::make_shared<Operators::DivOperator>()},
+            {"==", std::make_shared<Operators::EqualOperator>()},
+            {"!=", std::make_shared<Operators::NotEqualOperator>()},
         })
     {}
 
