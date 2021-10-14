@@ -50,7 +50,11 @@ add_library(PocoJsonPath
         src/PocoJsonPath/Operators/LowerThanOperator.cpp
         src/PocoJsonPath/Operators/LowerThanOperator.hpp
         src/PocoJsonPath/Operators/LowerThanOrEqualOperator.cpp
-        src/PocoJsonPath/Operators/LowerThanOrEqualOperator.hpp)
+        src/PocoJsonPath/Operators/LowerThanOrEqualOperator.hpp
+        src/PocoJsonPath/Operators/AndOperator.cpp
+        src/PocoJsonPath/Operators/AndOperator.hpp
+        src/PocoJsonPath/Operators/OrOperator.cpp
+        src/PocoJsonPath/Operators/OrOperator.hpp)
 target_link_libraries(PocoJsonPath Poco::Foundation Poco::JSON)
 
 add_subdirectory(test)

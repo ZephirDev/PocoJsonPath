@@ -16,6 +16,8 @@
 #include "Operators/LowerThanOrEqualOperator.hpp"
 #include "Operators/GreaterThanOperator.hpp"
 #include "Operators/GreaterThanOrEqualOperator.hpp"
+#include "Operators/AndOperator.hpp"
+#include "Operators/OrOperator.hpp"
 
 namespace PocoJsonPath {
 
@@ -33,8 +35,21 @@ namespace PocoJsonPath {
             {"<=", std::make_shared<Operators::LowerThanOrEqualOperator>()},
             {">", std::make_shared<Operators::GreaterThanOperator>()},
             {">=", std::make_shared<Operators::GreaterThanOrEqualOperator>()},
+            {"&&", std::make_shared<Operators::AndOperator>()},
+            {"||", std::make_shared<Operators::OrOperator>()},
         })
-    {}
+    {
+        std::map<std::string, std::vector<std::string>> aliases{
+            {"&&", {"and"}},
+            {"||", {"or"}},
+        };
+
+        for (auto& operatorToAlias : aliases) {
+            for (auto& alias : operatorToAlias.second) {
+                operators[alias] = operators[operatorToAlias.first];
+            }
+        }
+    }
 
     JsonPathScope::JsonPathScope(const JsonPathScope& jsonPathScope)
         : root(jsonPathScope.root)
