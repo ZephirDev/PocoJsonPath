@@ -12,6 +12,10 @@
 #include "Operators/DivOperator.hpp"
 #include "Operators/EqualOperator.hpp"
 #include "Operators/NotEqualOperator.hpp"
+#include "Operators/LowerThanOperator.hpp"
+#include "Operators/LowerThanOrEqualOperator.hpp"
+#include "Operators/GreaterThanOperator.hpp"
+#include "Operators/GreaterThanOrEqualOperator.hpp"
 
 namespace PocoJsonPath {
 
@@ -25,6 +29,10 @@ namespace PocoJsonPath {
             {"/", std::make_shared<Operators::DivOperator>()},
             {"==", std::make_shared<Operators::EqualOperator>()},
             {"!=", std::make_shared<Operators::NotEqualOperator>()},
+            {"<", std::make_shared<Operators::LowerThanOperator>()},
+            {"<=", std::make_shared<Operators::LowerThanOrEqualOperator>()},
+            {">", std::make_shared<Operators::GreaterThanOperator>()},
+            {">=", std::make_shared<Operators::GreaterThanOrEqualOperator>()},
         })
     {}
 

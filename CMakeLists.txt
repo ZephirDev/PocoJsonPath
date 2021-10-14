@@ -38,7 +38,7 @@ add_library(PocoJsonPath
         src/PocoJsonPath/Operators/MultOperator.cpp
         src/PocoJsonPath/Operators/MultOperator.hpp
         src/PocoJsonPath/Operators/DivOperator.cpp
-        src/PocoJsonPath/Operators/DivOperator.hpp src/PocoJsonPath/Operators/EqualOperator.cpp src/PocoJsonPath/Operators/EqualOperator.hpp src/PocoJsonPath/Operators/NotEqualOperator.cpp src/PocoJsonPath/Operators/NotEqualOperator.hpp)
+        src/PocoJsonPath/Operators/DivOperator.hpp src/PocoJsonPath/Operators/EqualOperator.cpp src/PocoJsonPath/Operators/EqualOperator.hpp src/PocoJsonPath/Operators/NotEqualOperator.cpp src/PocoJsonPath/Operators/NotEqualOperator.hpp src/PocoJsonPath/Operators/GreaterThanOperator.cpp src/PocoJsonPath/Operators/GreaterThanOperator.hpp src/PocoJsonPath/Operators/GreaterThanOrEqualOperator.cpp src/PocoJsonPath/Operators/GreaterThanOrEqualOperator.hpp src/PocoJsonPath/Operators/LowerThanOperator.cpp src/PocoJsonPath/Operators/LowerThanOperator.hpp src/PocoJsonPath/Operators/LowerThanOrEqualOperator.cpp src/PocoJsonPath/Operators/LowerThanOrEqualOperator.hpp)
 target_link_libraries(PocoJsonPath Poco::Foundation Poco::JSON)
 
 add_subdirectory(test)
