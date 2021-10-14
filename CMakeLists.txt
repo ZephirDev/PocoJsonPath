@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.10)
 project(PocoJsonPath)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 ########################################################################################
 
 ###> package/poco ###
-find_package(Poco REQUIRED Foundation JSON)
+find_package(Poco REQUIRED Foundation JSON Util)
 ###< package/poco ###
 
 ########################################################################################
@@ -57,4 +57,4 @@ add_library(PocoJsonPath
         src/PocoJsonPath/Operators/OrOperator.hpp)
 target_link_libraries(PocoJsonPath Poco::Foundation Poco::JSON)
 
-add_subdirectory(test)
+add_subdirectory(app)

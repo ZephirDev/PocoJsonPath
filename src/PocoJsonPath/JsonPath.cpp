@@ -39,7 +39,7 @@ namespace PocoJsonPath {
                 ESCAPE_STRING_CHARACTER     <- < '\\' . >
                 STRING_CHARACTER_DQUOTE     <- < [^"] >
                 STRING_CHARACTER_SQUOTE     <- < [^'] >
-                NUMBER                      <- [0-9]+ / [0-9]+[.][0-9]+
+                NUMBER                      <- < [0-9]+ > / < [0-9]+[.][0-9]+ >
                 ROOT                        <- '$'
                 CURRENT                     <- '@'
                 %whitespace                 <- [ \n]*
@@ -218,20 +218,8 @@ namespace PocoJsonPath {
 
                             return Poco::Dynamic::Var{};
                         });
-                    } else {
+                    } else { // .*
                         return PathFunction([key](JsonPathScope &scope) -> Poco::Dynamic::Var {
-                            auto obj = Helpers::JsonHelper::castToJsonObject(scope.getCurrent());
-                            if (obj.has_value()) {
-                                return obj.value()->get(key);
-                            }
-
-//                            if (index.has_value()) {
-//                                auto arr = Helpers::JsonHelper::castToJsonArray(scope.current);
-//                                if (arr.has_value() && arr.value()->size() > index.value()) {
-//                                    return arr.value()->get(index.value());
-//                                }
-//                            }
-
                             return Poco::Dynamic::Var{};
                         });
                     }
@@ -262,20 +250,75 @@ namespace PocoJsonPath {
             };
 
             ref["QUERY_WHERE"] = [](const peg::SemanticValues &vs) {
-                auto leftMemberFn = std::any_cast<PathFunction>(vs[0]);
                 auto operatorFn = std::any_cast<OperatorFunction>(vs[1]);
-                auto rightMemberFn = std::any_cast<PathFunction>(vs[2]);
-                return PathFunction([leftMemberFn, operatorFn, rightMemberFn](JsonPathScope& scope) {
-                    auto leftMember = leftMemberFn(scope);
-                    auto rightMember = rightMemberFn(scope);
+
+                std::optional<PathFunction> leftMemberFn;
+                std::optional<Poco::Dynamic::Var> leftMemberVar;
+
+                try {
+                    leftMemberFn = std::any_cast<PathFunction>(vs[0]);
+                } catch (const std::bad_any_cast&) {
+                    leftMemberVar = std::any_cast<Poco::Dynamic::Var>(vs[0]);
+                }
+
+                std::optional<PathFunction> rightMemberFn;
+                std::optional<Poco::Dynamic::Var> rightMemberVar;
+
+                try {
+                    rightMemberFn = std::any_cast<PathFunction>(vs[2]);
+                } catch (const std::bad_any_cast&) {
+                    rightMemberVar = std::any_cast<Poco::Dynamic::Var>(vs[2]);
+                }
+
+                return PathFunction([leftMemberFn, leftMemberVar, operatorFn, rightMemberFn, rightMemberVar](JsonPathScope& scope) {
+                    auto leftMember = leftMemberFn.has_value() ? (*leftMemberFn)(scope) : leftMemberVar.value();
+                    auto rightMember = rightMemberFn.has_value() ? (*rightMemberFn)(scope) : rightMemberVar.value();
                     return operatorFn(scope, leftMember, rightMember);
                 });
             };
 
             ref["FILTER"] = [](const peg::SemanticValues &vs) {
-                return PathFunction([](JsonPathScope& scope) {
-                    // TODO filter
-                    return scope.getCurrent();
+                auto where = std::any_cast<PathFunction>(vs[0]);
+                return PathFunction([where](JsonPathScope& scope) {
+                    auto list = Helpers::JsonHelper::castToJsonArray(scope.getCurrent());
+                    if (list.has_value()) {
+                        Poco::JSON::Array::Ptr result{new Poco::JSON::Array};
+                        for (size_t i = 0; i < list.value()->size(); i++) {
+                            auto item = list.value()->get(i);
+                            Poco::JSON::Object::Ptr subject{new Poco::JSON::Object};
+                            subject->set("key", i);
+                            subject->set("value", item);
+                            JsonPathScope subjectScope{scope, subject};
+                            auto whereResult = where(subjectScope);
+                            if (whereResult.isBoolean() && whereResult.extract<bool>()) {
+                                result->add(item);
+                            } else if (!whereResult.isEmpty() && !whereResult.isBoolean()) {
+                                result->add(item);
+                            }
+                        }
+                        return Poco::Dynamic::Var{result};
+                    }
+
+                    auto object = Helpers::JsonHelper::castToJsonObject(scope.getCurrent());
+                    if (list.has_value()) {
+                        Poco::JSON::Array::Ptr result{new Poco::JSON::Array};
+                        for (auto key : object.value()->getNames()) {
+                            auto item = object.value()->get(key);
+                            Poco::JSON::Object::Ptr subject{new Poco::JSON::Object};
+                            subject->set("key", key);
+                            subject->set("value", item);
+                            JsonPathScope subjectScope{scope, subject};
+                            auto whereResult = where(subjectScope);
+                            if (whereResult.isBoolean() && whereResult.extract<bool>()) {
+                                result->add(item);
+                            } else if (!whereResult.isEmpty() && !whereResult.isBoolean()) {
+                                result->add(item);
+                            }
+                        }
+                        return Poco::Dynamic::Var{result};
+                    }
+
+                    return Poco::Dynamic::Var{};
                 });
             };
 
